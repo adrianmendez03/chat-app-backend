@@ -1,5 +1,5 @@
 const db = require('../models')
-const { Room, User } = db
+const { Room, User, Message } = db
 
 exports.findAll = async () => {
     try {
@@ -82,6 +82,23 @@ exports.removeMember = async (roomId, userId) => {
         const result = await Room.findByPk(
             roomId,
             { include: User }
+        )
+        return result
+    } catch(err) {
+        return err
+    }
+}
+
+exports.addMessage = async (roomId, body) => {
+    try {
+        const room = await Room.findByPk(roomId)
+        const message = await Message.create({
+            content: body.content
+        })
+        await room.addMessage(message)
+        const result = await Room.findByPk(
+            roomId,
+            { include: Message }
         )
         return result
     } catch(err) {

@@ -44,4 +44,10 @@ router.delete('/:roomId/remove/:userId', async (req, res) => {
     res.json(await controller.removeMember(roomId, userId))
 })
 
+// ADD MESSAGE TO ROOM
+router.post('/:roomId/messages', async (req, res) => {
+    const { roomId } = req.params
+    res.json(await controller.addMessage(roomId, req.body)) 
+})
+
 module.exports = router
