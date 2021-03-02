@@ -70,3 +70,15 @@ exports.createRequest = async (requesteeId, requesterId) => {
         return err
     }
 }
+
+exports.deleteRequest = async (requesteeId, requesterId) => {
+    try {
+        const requestee = await User.findByPk(requesteeId)
+        const requester = await User.findByPk(requesterId)
+        await requestee.removeRequest(requester)
+        await requester.removeRequest(requestee)
+        return { message: 'Request deleted.'}     
+    } catch(err) {
+        return err
+    }
+}
