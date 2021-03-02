@@ -4,7 +4,9 @@ const bcrypt = require('bcryptjs')
 
 exports.findAll = async () => {
     try {
-        const users = await User.findAll({})
+        const users = await User.findAll({ 
+            include: [{ model: User, as: 'requests' }] 
+        })
         return users
     } catch(err) {
         return err
@@ -29,7 +31,7 @@ exports.findById = async (id) => {
     try {
         const user = await User.findByPk(
             id,
-            { include: Room }
+            { include: [Room, { model: User, as: 'requests' }] }
         )
         return user
     } catch(err) {
@@ -52,6 +54,18 @@ exports.deleteUser = async (id) => {
         const user = await User.findByPk(id)
         user.destroy()
         return { message: 'User deleted.'}
+    } catch(err) {
+        return err
+    }
+}
+
+exports.createRequest = async (requesteeId, requesterId) => {
+    try {
+        const requestee = await User.findByPk(requesteeId)
+        const requester = await User.findByPk(requesterId)
+        await requester.addRequest(requestee, { through: { response: 'received' }})
+        await requestee.addRequest(requester, { through: { response: 'sent' }})
+        return { message: 'Request sent.' }
     } catch(err) {
         return err
     }

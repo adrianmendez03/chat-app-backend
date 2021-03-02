@@ -30,6 +30,12 @@ const User_Rooms = sequelize.define('User_Rooms', {
     }
 })
 
+const User_Requests = sequelize.define('User_Requests', {
+    response: {
+        type: Sequelize.STRING
+    }
+})
+
 const Room_Messages = sequelize.define('Room_Messages', {
     sender: {
         type: Sequelize.STRING,
@@ -39,6 +45,7 @@ const Room_Messages = sequelize.define('Room_Messages', {
 
 User.belongsToMany(Room, { through: 'User_Rooms' })
 Room.belongsToMany(User, { through: 'User_Rooms' })
+User.belongsToMany(User, { as: 'requests', through: 'User_Requests' })
 Room.hasMany(Message)
 Message.belongsTo(Room)
 

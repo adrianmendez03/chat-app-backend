@@ -30,6 +30,7 @@ const { User, Room } = db
 
 const run = async () => {
     await User.create({ email: "adrianmndz328@gmail.com", password: "10222016", username: "adrianmendez03" })
+    await User.create({ email: "xvictimized@gmail.com", password: "102020112", username: "xvictmized" })
     await Room.create({ name: "Test Room" })
 }
 
