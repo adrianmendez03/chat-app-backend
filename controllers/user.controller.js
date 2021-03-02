@@ -1,12 +1,14 @@
 const db = require('../models')
-const User = db.user
+const { User, Room } = db
 const bcrypt = require('bcryptjs')
 
 exports.findAll = async () => {
-    const users = await User.findAll({
-        include: ['rooms']
-    })
-    return users
+    try {
+        const users = await User.findAll({})
+        return users
+    } catch(err) {
+        return err
+    }
 }
 
 exports.createUser = async (user) => {
@@ -17,9 +19,31 @@ exports.createUser = async (user) => {
             password: user.password,
             username: user.username
         })
-        console.log('Created User: ', JSON.stringify(newUser, null, 4))
         return newUser
     } catch (err) {
-        console.log('Error while creating User: ', err)
+        return err
+    }
+}
+
+exports.findById = async (id) => {
+    try {
+        const user = await User.findByPk(
+            id,
+            { include: Room }
+        )
+        return user
+    } catch(err) {
+        return err
+    }
+}
+
+exports.updateUser = async (id, body) => {
+    console.log(body)
+    try {
+        const user = await User.findByPk(id)
+        user.update(body)
+        return user
+    } catch(err) {
+        return err
     }
 }
