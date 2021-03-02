@@ -4,28 +4,29 @@ const controller = require('../controllers/user.controller')
 
 // INDEX
 router.get('/', async (req, res) => {
-    const users = await controller.findAll()
-    res.json(users)
+    res.json(await controller.findAll())
 })
 
 // CREATE
 router.post('/', async (req, res) => {
-    const newUser = await controller.createUser(req.body)
-    res.json(newUser)
+    res.json(await controller.createUser(req.body))
 })
 
 // GET BY ID
 router.get('/:id', async (req, res) => {
     const { id } = req.params
-    const user = await controller.findById(id)
-    res.json(user)
+    res.json(await controller.findById(id))
 })
 
 // UPDATE
 router.put('/:id', async (req, res) => {
     const { id } = req.params
-    const user = await controller.updateUser(id, req.body)
-    res.json(user)
+    res.json(await controller.updateUser(id, req.body))
+})
+
+router.delete('/:id', async (req, res) => {
+    const { id } = req.params
+    res.json(await controller.deleteUser(id))
 })
 
 

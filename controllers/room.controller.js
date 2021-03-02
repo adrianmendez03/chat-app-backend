@@ -3,22 +3,27 @@ const { Room, User } = db
 
 exports.findAll = async () => {
     try {
-        const rooms = await Room.findAll({})
+        const rooms = await Room.findAll({ include: User })
         return rooms
     } catch(err) {
         console.log('Error while finding Rooms: ', err)
     }
 }
 
-exports.createRoom = async (room) => {
+exports.createRoom = async (body, userId) => {
     try {
-        const newRoom = await Room.create({
-            name: room.name
+        const room = await Room.create({
+            name: body.name
         })
-        console.log('Created Room: ', JSON.stringify(newRoom, null, 4))
-        return newRoom
+        const user = await User.findByPk(userId)
+        await room.addUser(user, { through: { admin: true } })
+        const result = await Room.findByPk(
+            room.id,
+            { include: User }
+        )
+        return result
     } catch (err) {
-        console.log('Error while creating User: ', err)
+        return err
     }
 }
 
@@ -34,16 +39,25 @@ exports.findById = async (id) => {
     }
 }
 
+exports.updateRoom = async (id, body) => {
+    try {
+        const room = await Room.findByPk(id)
+        room.update(body)
+        return room
+    } catch(err) {
+        return err
+    }
+}
+
 exports.addMember = async (roomId, userId) => {
     try {
         const room = await Room.findByPk(roomId)
         const user = await User.findByPk(userId)
-        // await user.addRoom(room)
         await room.addUser(user)
-        const result = await Room.findOne({
-            where: { id: roomId },
-            include: User
-        })
+        const result = await Room.findByPk(
+            roomId,
+            { include: User }
+        )
         return result
     } catch(err) {
         return err

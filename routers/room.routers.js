@@ -2,22 +2,31 @@ const { Router } = require('express')
 const router = Router()
 const controller = require('../controllers/room.controller')
 
+// INDEX
 router.get('/', async (req, res) => {
-    const room = await controller.findAll()
-    res.json(room)
+    res.json(await controller.findAll())
 })
 
-router.post('/', async (req, res) => {
-    const newRoom = await controller.createRoom(req.body)
-    res.json(newRoom)
+// CREATE
+router.post('/:userId', async (req, res) => {
+    const { userId } = req.params
+    console.log(userId)
+    res.json(await controller.createRoom(req.body, userId))
 })
 
+// GET ONE ROOM
 router.get('/:id', async (req, res) => {
     const { id } = req.params
-    const room = await controller.findById(id)
-    res.json(room)
+    res.json(await controller.findById(id))
 })
 
+// UPDATE 
+router.put('/:id', async (req, res) => {
+    const { id } = req.params
+    res.json(await controller.updateRoom(id, req.body))
+})
+
+// ADD MEMBER TO ROOM
 router.post('/:roomId/add/:userId', async (req, res) => {
     const { roomId, userId } = req.params
     res.json(await controller.addMember(roomId, userId))

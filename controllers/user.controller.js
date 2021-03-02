@@ -38,11 +38,20 @@ exports.findById = async (id) => {
 }
 
 exports.updateUser = async (id, body) => {
-    console.log(body)
     try {
         const user = await User.findByPk(id)
         user.update(body)
         return user
+    } catch(err) {
+        return err
+    }
+}
+
+exports.deleteUser = async (id) => {
+    try {
+        const user = await User.findByPk(id)
+        user.destroy()
+        return { message: 'User deleted.'}
     } catch(err) {
         return err
     }

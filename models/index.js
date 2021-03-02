@@ -23,6 +23,13 @@ db.Message = require('./message.model')(sequelize, Sequelize)
 
 const { User, Room, Messasage } = db
 
+const User_Rooms = sequelize.define('User_Rooms', {
+    admin: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
+    }
+})
+
 User.belongsToMany(Room, { through: 'User_Rooms' })
 Room.belongsToMany(User, { through: 'User_Rooms' })
 
