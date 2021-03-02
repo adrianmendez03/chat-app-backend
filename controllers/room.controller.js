@@ -49,11 +49,36 @@ exports.updateRoom = async (id, body) => {
     }
 }
 
+exports.deleteRoom = async (id) => {
+    try {
+        const room = await Room.findByPk(id)
+        room.destroy()
+        return { message: 'Room deleted.'}
+    } catch(err) {
+        return err
+    }
+}
+
 exports.addMember = async (roomId, userId) => {
     try {
         const room = await Room.findByPk(roomId)
         const user = await User.findByPk(userId)
         await room.addUser(user)
+        const result = await Room.findByPk(
+            roomId,
+            { include: User }
+        )
+        return result
+    } catch(err) {
+        return err
+    }
+}
+
+exports.removeMember = async (roomId, userId) => {
+    try {
+        const room = await Room.findByPk(roomId)
+        const user = await User.findByPk(userId)
+        await room.removeUser(user)
         const result = await Room.findByPk(
             roomId,
             { include: User }

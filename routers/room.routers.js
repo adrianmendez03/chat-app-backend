@@ -26,10 +26,22 @@ router.put('/:id', async (req, res) => {
     res.json(await controller.updateRoom(id, req.body))
 })
 
+// DELETE 
+router.delete('/:id', async (req, res) => {
+    const { id } = req.params
+    res.json(await controller.deleteRoom(id))
+})
+
 // ADD MEMBER TO ROOM
 router.post('/:roomId/add/:userId', async (req, res) => {
     const { roomId, userId } = req.params
     res.json(await controller.addMember(roomId, userId))
+})
+
+// REMOVE MEMBER FROM ROOM
+router.delete('/:roomId/remove/:userId', async (req, res) => {
+    const { roomId, userId } = req.params
+    res.json(await controller.removeMember(roomId, userId))
 })
 
 module.exports = router

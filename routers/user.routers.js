@@ -24,6 +24,7 @@ router.put('/:id', async (req, res) => {
     res.json(await controller.updateUser(id, req.body))
 })
 
+// DELETE
 router.delete('/:id', async (req, res) => {
     const { id } = req.params
     res.json(await controller.deleteUser(id))
