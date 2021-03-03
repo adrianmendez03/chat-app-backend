@@ -106,3 +106,15 @@ exports.addFriend = async (userId, friendId) => {
         return err
     }
 }
+
+exports.deleteFriend = async (userId, friendId) => {
+    try {
+        const user = await User.findByPk(userId)
+        const friend = await User.findByPk(friendId)
+        await user.removeFriend(friend)
+        await friend.removeFriend(user)
+        return { message: 'Friend removed.' }
+    } catch(err) {
+        return err
+    }
+}

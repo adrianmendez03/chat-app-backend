@@ -49,5 +49,9 @@ router.post('/:userId/friend/:friendId', async (req, res) => {
 })
 
 // REMOVE FRIEND
+router.delete('/:userId/friend/:friendId', async (req, res) => {
+    const { userId, friendId } = req.params
+    res.json(await controller.deleteFriend(userId, friendId))
+})
 
 module.exports = router
