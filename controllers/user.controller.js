@@ -5,7 +5,11 @@ const bcrypt = require('bcryptjs')
 exports.findAll = async () => {
     try {
         const users = await User.findAll({ 
-            include: [{ model: User, as: 'requests' }] 
+            include: [
+                Room, 
+                { model: User, as: 'requests' },
+                { model: User, as: 'friends' }
+            ] 
         })
         return users
     } catch(err) {
@@ -31,7 +35,13 @@ exports.findById = async (id) => {
     try {
         const user = await User.findByPk(
             id,
-            { include: [Room, { model: User, as: 'requests' }] }
+            {
+                include: [
+                    Room, 
+                    { model: User, as: 'requests' },
+                    { model: User, as: 'friends' }
+                ] 
+            }
         )
         return user
     } catch(err) {
@@ -78,6 +88,20 @@ exports.deleteRequest = async (requesteeId, requesterId) => {
         await requestee.removeRequest(requester)
         await requester.removeRequest(requestee)
         return { message: 'Request deleted.'}     
+    } catch(err) {
+        return err
+    }
+}
+
+exports.addFriend = async (userId, friendId) => {
+    try {
+        const user = await User.findByPk(userId)
+        const friend = await User.findByPk(friendId)
+        await user.removeRequest(friend)
+        await friend.removeRequest(user)
+        await user.addFriend(friend)
+        await friend.addFriend(user)
+        return { message: 'Friend added.'}
     } catch(err) {
         return err
     }

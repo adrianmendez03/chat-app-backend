@@ -42,4 +42,12 @@ router.delete('/:requesteeId/request/:requesterId', async (req, res) => {
     res.json(await controller.deleteRequest(requesteeId, requesterId))
 })
 
+// ADD FRIEND
+router.post('/:userId/friend/:friendId', async (req, res) => {
+    const { userId, friendId } = req.params
+    res.json(await controller.addFriend(userId, friendId))
+})
+
+// REMOVE FRIEND
+
 module.exports = router

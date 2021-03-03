@@ -46,6 +46,7 @@ const Room_Messages = sequelize.define('Room_Messages', {
 User.belongsToMany(Room, { through: 'User_Rooms' })
 Room.belongsToMany(User, { through: 'User_Rooms' })
 User.belongsToMany(User, { as: 'requests', through: 'User_Requests' })
+User.belongsToMany(User, { as: 'friends', through: 'User_Friends' })
 Room.hasMany(Message)
 Message.belongsTo(Room)
 
